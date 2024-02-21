@@ -1,0 +1,13 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "User", "Пользователь социальной сети")
+System(profile, "Профиль")
+System(statistics_service, "Сервис по сбору статистики")
+System(posts_service, "Сервис сообщений и комментариев")
+
+Rel(user, profile, "Отправляет запросы на получение сообщений, отправляет новые сообщения, комментарии, лайки")
+Rel(profile, statistics_service, " ")
+Rel(profile, posts_service, " ")
+
+@enduml
