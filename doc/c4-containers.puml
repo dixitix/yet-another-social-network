@@ -31,6 +31,8 @@ Rel(mainService, mainDb, "Reads/Writes")
 Rel(postsAndCommentsService, postsAndCommentsDb, "Reads/Writes")
 
 Rel_U(mainService, messageBroker, "Отправляет события", "Publish")
+Rel_U(statisticsService, mainService, "Отправляет статистику", "gRPC")
+Rel_U(mainService, statisticsService, "Забирает статистику", "gRPC")
 Rel_D(messageBroker, statisticsService, "Отправляет события", "Subscribe")
 Rel(statisticsService, statisticsDb, "Reads/Writes")
 
