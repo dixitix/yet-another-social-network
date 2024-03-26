@@ -3,8 +3,16 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 import bcrypt
+import os
 
 Base = declarative_base()
+
+DATABASE_URI = os.getenv('DATABASE_URL')
+engine = create_engine(DATABASE_URI)
+Session = sessionmaker(bind=engine)
+
+def create_db():
+    Base.metadata.create_all(engine)
 
 class User(Base):
     __tablename__ = 'users'
@@ -17,13 +25,6 @@ class User(Base):
     date_of_birth = Column(Date)
     email = Column(String)
     phone_number = Column(String)
-
-DATABASE_URI = 'postgresql+psycopg2://dixitix:dixi@localhost:5432/network_auth_server'
-engine = create_engine(DATABASE_URI)
-Session = sessionmaker(bind=engine)
-
-def create_db():
-    Base.metadata.create_all(engine)
 
 def add_user(username, password, **kwargs):
     session = Session()
