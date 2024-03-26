@@ -1,8 +1,14 @@
-FROM python:3.10
+FROM python:3.9-slim
 
-WORKDIR /server_auth
-COPY . .
+WORKDIR /auth-server
 
-RUN pip install -r requirements.txt
+COPY . /auth-server
 
-CMD ["python3", "app.py"]
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 5000
+
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+
+CMD ["flask", "run"]
