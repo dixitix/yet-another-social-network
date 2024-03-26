@@ -1,8 +1,12 @@
 from flask import Flask, request, jsonify
-from database import add_user, update_user, authenticate_user
+from database import add_user, update_user, authenticate_user, create_db
 from datetime import datetime
+import os
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+
+create_db()
 
 @app.route('/register', methods=['POST'])
 def register():
