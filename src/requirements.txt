@@ -1,0 +1,6 @@
+sqlalchemy
+Flask
+flask-sqlalchemy
+psycopg2
+bcrypt
+datetime
