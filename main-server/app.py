@@ -47,7 +47,7 @@ def login():
     if username and password:
         authenticated = authenticate_user(username, password)
         if authenticated:
-            access_token = create_access_token(identity=id)
+            access_token = create_access_token(identity=username)
             return jsonify(access_token=access_token), 200
         else:
             return jsonify({'error': 'Invalid credentials'}), 401
