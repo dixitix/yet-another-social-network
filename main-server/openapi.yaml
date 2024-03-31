@@ -1,0 +1,244 @@
+openapi: 3.0.0
+info:
+  title: User Service API
+  description: API for user registration, update, and authentication.
+  version: 1.0.1
+servers:
+  - url: http://localhost:5000/
+paths:
+  /register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                date_of_birth:
+                  type: string
+                  format: date
+                email:
+                  type: string
+                phone_number:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Username already exists or missing username/password
+  /update:
+    put:
+      summary: Update an existing user's details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                date_of_birth:
+                  type: string
+                  format: date
+                email:
+                  type: string
+                phone_number:
+                  type: string
+              required:
+                - username
+      responses:
+        '200':
+          description: User updated successfully
+        '400':
+          description: Username is required
+        '404':
+          description: User not found
+  /login:
+    post:
+      summary: Authenticate a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: User authenticated successfully
+        '400':
+          description: Username and password are required
+        '401':
+          description: Invalid credentials
+  /posts:
+    post:
+      summary: Create a new post
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+              required:
+                - title
+                - content
+      responses:
+        '201':
+          description: Post created successfully
+        '500':
+          description: Failed to create post
+    get:
+      summary: List posts for the authenticated user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination.
+      responses:
+        '200':
+          description: A list of posts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+        '401':
+          description: Unauthorized, invalid or missing JWT token.
+        '500':
+          description: Internal server error or unable to fetch posts.
+  /posts/{post_id}:
+    put:
+      summary: Update an existing post
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+              required:
+                - title
+                - content
+      responses:
+        '200':
+          description: Post updated successfully
+        '500':
+          description: Failed to update post
+    delete:
+      summary: Delete an existing post
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Post deleted successfully
+        '500':
+          description: Failed to delete post
+    get:
+      summary: Retrieve a specific post by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Post retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  owner_id:
+                    type: string
+                  title:
+                    type: string
+                  content:
+                    type: string
+        '404':
+          description: Post not found
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+        owner_id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+      required:
+        - id
+        - owner_id
+        - title
+        - content
