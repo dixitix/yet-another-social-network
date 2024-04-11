@@ -76,7 +76,18 @@ class Database:
         page_size = request.page_size
         user_id = request.user_id
         
-        cursor = self.collection.find({"owner_id": user_id}).skip((page_number - 1) * page_size).limit(page_size)
+        total_documents = self.collection.count_documents({"owner_id": user_id})
+
+        documents_to_skip = (page_number - 1) * page_size
+        remaining_documents = max(total_documents - documents_to_skip, 0)
+
+        actual_limit = min(page_size, remaining_documents)
+
+        if actual_limit > 0:
+            cursor = self.collection.find({"owner_id": user_id}).skip(documents_to_skip).limit(actual_limit)
+        else:
+            cursor = []
+
         posts = []
         
         for document in cursor:

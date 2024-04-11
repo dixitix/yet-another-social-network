@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-from database import add_user, update_user, authenticate_user, create_db, User
+from database import add_user, update_user, authenticate_user, create_db, get_id, User
 from datetime import datetime, timedelta
 import os
 import grpc
@@ -73,7 +73,7 @@ def update():
 @jwt_required()
 def create_post():
     data = request.json
-    cur_user_id = get_jwt_identity()
+    cur_user_id = get_id(get_jwt_identity())
     try:
         response = post_service_stub.CreatePost(post_pb2.CreatePostRequest(
             owner_id=cur_user_id,
@@ -91,7 +91,7 @@ def create_post():
 @jwt_required()
 def update_post(post_id):
     data = request.json
-    cur_user_id = get_jwt_identity()
+    cur_user_id = get_id(get_jwt_identity())
     try:
         response = post_service_stub.UpdatePost(post_pb2.UpdatePostRequest(
             id=post_id,
@@ -109,7 +109,7 @@ def update_post(post_id):
 @app.route('/posts/<post_id>', methods=['DELETE'])
 @jwt_required()
 def delete_post(post_id):
-    cur_user_id = get_jwt_identity()
+    cur_user_id = get_id(get_jwt_identity())
     try:
         response = post_service_stub.DeletePost(post_pb2.DeletePostRequest(id=post_id, user_id=cur_user_id))
         if response.success:
@@ -122,9 +122,9 @@ def delete_post(post_id):
 @app.route('/posts/<post_id>', methods=['GET'])
 @jwt_required()
 def get_post(post_id):
-    cur_user_id = get_jwt_identity()
+    cur_user_id = get_id(get_jwt_identity())
     try:
-        response = post_service_stub.GetPost(post_pb2.GetPostByIdRequest(id=post_id, user_id=cur_user_id))
+        response = post_service_stub.GetPostById(post_pb2.GetPostByIdRequest(id=post_id, user_id=cur_user_id))
         if response.post:
             post_data = {
                 'id': response.post.id,
@@ -141,10 +141,11 @@ def get_post(post_id):
 @app.route('/posts', methods=['GET'])
 @jwt_required()
 def list_posts():
-    cur_user_id = get_jwt_identity()
-    page = request.args.get('page', default=1, type=int)
+    cur_user_id = get_id(get_jwt_identity())
+    page_number = request.args.get('page_number', default=1, type=int)
+    page_size = request.args.get('page_size', default=5, type=int)
     try:
-        response = post_service_stub.ListPosts(post_pb2.ListPostsRequest(user_id=cur_user_id, page=page, page_size=5))
+        response = post_service_stub.ListPosts(post_pb2.ListPostsRequest(user_id=cur_user_id, page_number=page_number, page_size=page_size))
         posts_data = [{
             'id': post.id,
             'owner_id': post.owner_id,

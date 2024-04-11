@@ -62,6 +62,12 @@ def authenticate_user(username, password):
     else:
         session.close()
         return False
+    
+def get_id(username):
+    session = Session()
+    user = session.query(User).filter_by(username=username).first()
+    session.close()
+    return user.id
 
 if __name__ == '__main__':
     create_db()

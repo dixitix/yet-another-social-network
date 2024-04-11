@@ -11,8 +11,8 @@ class PostService(post_pb2_grpc.PostServiceServicer):
 
     def CreatePost(self, request, context):
         result = self.db.create_post(request)
-        if result.success:
-            post_data = result.post
+        if result["success"]:
+            post_data = result["post"]
             return post_pb2.OperationResponse(
                 success=True,
                 post=post_pb2.Post(
@@ -31,8 +31,8 @@ class PostService(post_pb2_grpc.PostServiceServicer):
 
     def UpdatePost(self, request, context):
         result = self.db.update_post(request)
-        if result.success:
-            post_data = result.post
+        if result["success"]:
+            post_data = result["post"]
             return post_pb2.OperationResponse(
                 success=True,
                 post=post_pb2.Post(
@@ -55,7 +55,7 @@ class PostService(post_pb2_grpc.PostServiceServicer):
 
     def DeletePost(self, request, context):
         result = self.db.delete_post(request)
-        if result.success:
+        if result["success"]:
             return post_pb2.OperationResponse(
                 success=True,
             )
@@ -75,8 +75,8 @@ class PostService(post_pb2_grpc.PostServiceServicer):
 
     def GetPostById(self, request, context):
         result = self.db.get_post_by_id(request)
-        if result.success:
-            post_data = result.post
+        if result["success"]:
+            post_data = result["post"]
             return post_pb2.OperationResponse(
                 success=True,
                 post=post_pb2.Post(

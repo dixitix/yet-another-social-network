@@ -11,7 +11,7 @@ message CreatePostRequest {
 
 // The request message containing the data needed to update a post by its ID.
 message UpdatePostRequest {
-  int32 id = 1;
+  string id = 1;
   int32 user_id = 2;
   string title = 3;
   string content = 4;
@@ -19,7 +19,7 @@ message UpdatePostRequest {
 
 // The request message for deleting a post by its ID.
 message DeletePostRequest {
-  int32 id = 1;
+  string id = 1;
   int32 user_id = 2;
 }
 
@@ -32,13 +32,13 @@ message ListPostsRequest {
 
 // The request message for retrieving a post by its ID.
 message GetPostByIdRequest {
-  int32 id = 1;
+  string id = 1;
   int32 user_id = 2;
 }
 
 // Represents a post object with an ID, owner id, title, and content.
 message Post {
-  int32 id = 1;
+  string id = 1;
   int32 owner_id = 2;
   string title = 3;
   string content = 4;
