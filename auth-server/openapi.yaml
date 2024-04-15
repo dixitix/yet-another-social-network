@@ -62,13 +62,10 @@ paths:
                   type: string
                 phone_number:
                   type: string
-              required:
-                - username
+              required: true
       responses:
         '200':
           description: User updated successfully
-        '400':
-          description: Username is required
         '404':
           description: User not found
   /login:

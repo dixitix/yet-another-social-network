@@ -1,5 +1,6 @@
 sqlalchemy
 Flask
 flask-sqlalchemy
+flask_jwt_extended
 psycopg2-binary
 bcrypt
