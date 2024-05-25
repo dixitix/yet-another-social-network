@@ -1,0 +1,8 @@
+sqlalchemy
+Flask
+flask-sqlalchemy
+psycopg2-binary
+bcrypt
+Flask-JWT-Extended
+grpcio
+protobuf

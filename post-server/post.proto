@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package post;
+
+// The request message containing the data needed to create a new post.
+message CreatePostRequest {
+  int32 owner_id = 1;
+  string title = 2;
+  string content = 3;
+}
+
+// The request message containing the data needed to update a post by its ID.
+message UpdatePostRequest {
+  string id = 1;
+  int32 user_id = 2;
+  string title = 3;
+  string content = 4;
+}
+
+// The request message for deleting a post by its ID.
+message DeletePostRequest {
+  string id = 1;
+  int32 user_id = 2;
+}
+
+// The request message for listing posts with pagination.
+message ListPostsRequest {
+  int32 user_id = 1;
+  int32 page_number = 2; // The current page number. Starting from 1.
+  int32 page_size = 3; // The number of posts per page.
+}
+
+// The request message for retrieving a post by its ID.
+message GetPostByIdRequest {
+  string id = 1;
+  int32 user_id = 2;
+}
+
+// Represents a post object with an ID, owner id, title, and content.
+message Post {
+  string id = 1;
+  int32 owner_id = 2;
+  string title = 3;
+  string content = 4;
+}
+
+message OperationResponse {
+  bool success = 1;
+  Post post = 2; // Optional: included in responses for GetById, Create and Update operations.
+}
+
+// The response message containing posts with pagination.
+message ListPostsResponse {
+  repeated Post posts = 1; // Post objects in the current page. 
+  int32 next_page = 2; // The next page number to fetch more posts. Zero if this is the last page.
+}
+
+// PostService defines the RPC methods available for interacting with posts.
+// It includes operations to create new posts, retrieve, delete, update existing ones by their ID 
+// and retrieving list of posts with pagination.
+service PostService {
+  // Creates a new post with the given owner_id, title and content, 
+  // returning information about successing of operation and the created post.
+  rpc CreatePost(CreatePostRequest) returns (OperationResponse);
+
+  // Updates an existing post with the given post id, user id, title and content. 
+  // Returns information about the success or failure of the operation and the updated post.
+  // The operation will only succeed if the provided user_id matches the owner_id of the post.
+  rpc UpdatePost(UpdatePostRequest) returns (OperationResponse);
+
+  // Deletes an existing post by the given post id and user id. Returns information about the success or failure of the operation.
+  // The operation will only succeed if the provided user_id matches the owner_id of the post.
+  rpc DeletePost(DeletePostRequest) returns (OperationResponse);
+
+  // Retrieves the details of an existing post by post id and user id. 
+  // The operation will only succeed if the provided user_id matches the owner_id of the post.
+  rpc GetPostById(GetPostByIdRequest) returns (OperationResponse);
+
+  // Lists posts with pagination by given current page number, number of posts per page and user_id. 
+  // Returns posts of their creator by owner_id and the next page number.
+  rpc ListPosts(ListPostsRequest) returns (ListPostsResponse);
+}

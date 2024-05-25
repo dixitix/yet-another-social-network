@@ -1,0 +1,61 @@
+version: '3.8'
+services:
+  main-db:
+    image: postgres:latest
+    volumes:
+      - main_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: network_main_server
+      POSTGRES_USER: dixitix
+      POSTGRES_PASSWORD: dixi
+    ports:
+      - "5433:5433"
+    networks:
+      - app-network
+
+  main-web:
+    build:
+      context: ./main-server
+    command: flask run --host=0.0.0.0
+    volumes:
+      - ./main-server:/auth-server
+    ports:
+      - "5001:5000"
+    environment:
+      FLASK_APP: app.py
+      FLASK_ENV: development
+      DATABASE_URL: postgresql://dixitix:dixi@main-db/network_main_server
+      POST_SERVER_HOST: post-web
+    depends_on:
+      - main-db
+    networks:
+      - app-network
+
+  post-db:
+    image: mongo:latest
+    volumes:
+      - post_mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+  post-web:
+    build:
+      context: ./post-server
+    ports:
+      - "50051:50051"
+    environment:
+      MONGO_URI: mongodb://post-db:27017
+    depends_on:
+      - post-db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  main_postgres_data:
+  post_mongo_data:

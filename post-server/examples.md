@@ -1,0 +1,28 @@
+curl -X POST http://localhost:5001/posts \
+-H "Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMzE5NzEzOSwianRpIjoiMDYyYTM1NzItZjEyZi00NGVlLTllNTYtY2U1MjVhNjFiZjk1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImRpeGl0aXgiLCJuYmYiOjE3MTMxOTcxMzksImNzcmYiOiJhYjQ4MGNmMy1lZGUzLTQyNzYtOTcwMi0yOTA2NTQ5OTc0ZGYiLCJleHAiOjE3MTMyMDA3Mzl9.UF32oIxlGyB6VqPBOiqLyBiHcc7NehOfgrj0XDpxW34"" \
+-H "Content-Type: application/json" \
+-d '{
+  "title": "Beginning of life",
+  "content": "Hello world!"
+}'
+
+
+curl -X PUT http://localhost:5001/posts/661d5115a56ac661c859cc68 \
+-H "Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMzE5NzEzOSwianRpIjoiMDYyYTM1NzItZjEyZi00NGVlLTllNTYtY2U1MjVhNjFiZjk1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImRpeGl0aXgiLCJuYmYiOjE3MTMxOTcxMzksImNzcmYiOiJhYjQ4MGNmMy1lZGUzLTQyNzYtOTcwMi0yOTA2NTQ5OTc0ZGYiLCJleHAiOjE3MTMyMDA3Mzl9.UF32oIxlGyB6VqPBOiqLyBiHcc7NehOfgrj0XDpxW34"" \
+-H "Content-Type: application/json" \
+-d '{
+  "title": "Life",
+  "content": "C++ is the best programming language ever"
+}'
+
+
+curl -X GET http://localhost:5001/posts/661d5115a56ac661c859cc68 \
+-H "Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMzE5NzEzOSwianRpIjoiMDYyYTM1NzItZjEyZi00NGVlLTllNTYtY2U1MjVhNjFiZjk1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImRpeGl0aXgiLCJuYmYiOjE3MTMxOTcxMzksImNzcmYiOiJhYjQ4MGNmMy1lZGUzLTQyNzYtOTcwMi0yOTA2NTQ5OTc0ZGYiLCJleHAiOjE3MTMyMDA3Mzl9.UF32oIxlGyB6VqPBOiqLyBiHcc7NehOfgrj0XDpxW34""
+
+
+curl -X GET 'http://localhost:5001/posts?page_number=1&page_size=5' \
+-H "Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMzE5NzEzOSwianRpIjoiMDYyYTM1NzItZjEyZi00NGVlLTllNTYtY2U1MjVhNjFiZjk1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImRpeGl0aXgiLCJuYmYiOjE3MTMxOTcxMzksImNzcmYiOiJhYjQ4MGNmMy1lZGUzLTQyNzYtOTcwMi0yOTA2NTQ5OTc0ZGYiLCJleHAiOjE3MTMyMDA3Mzl9.UF32oIxlGyB6VqPBOiqLyBiHcc7NehOfgrj0XDpxW34""
+
+
+curl -X DELETE http://localhost:5001/posts/661d5115a56ac661c859cc68 \
+-H "Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMzE5NzEzOSwianRpIjoiMDYyYTM1NzItZjEyZi00NGVlLTllNTYtY2U1MjVhNjFiZjk1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImRpeGl0aXgiLCJuYmYiOjE3MTMxOTcxMzksImNzcmYiOiJhYjQ4MGNmMy1lZGUzLTQyNzYtOTcwMi0yOTA2NTQ5OTc0ZGYiLCJleHAiOjE3MTMyMDA3Mzl9.UF32oIxlGyB6VqPBOiqLyBiHcc7NehOfgrj0XDpxW34""
