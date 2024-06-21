@@ -58,11 +58,11 @@ def authenticate_user(username, password):
     user = session.query(User).filter_by(username=username).first()
     if user and bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')):
         session.close()
-        return True
+        return user
     else:
         session.close()
-        return False
-    
+        return None
+
 def get_id(username):
     session = Session()
     user = session.query(User).filter_by(username=username).first()

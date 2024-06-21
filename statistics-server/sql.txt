@@ -1,0 +1,51 @@
+CREATE TABLE kafka_events (
+    event_type String,
+    user_id UInt64,
+    post_id UInt64
+) ENGINE = Kafka()
+SETTINGS
+    kafka_broker_list = 'kafka:29092',
+    kafka_topic_list = 'events',
+    kafka_group_name = 'clickhouse_group',
+    kafka_format = 'JSONEachRow',
+    kafka_num_consumers = 1;
+
+CREATE TABLE events_queue (
+    event_type String,
+    user_id UInt64,
+    post_id UInt64
+) ENGINE = MergeTree()
+ORDER BY (event_type, user_id, post_id);
+
+CREATE MATERIALIZED VIEW events_mv TO events_queue AS
+SELECT
+    event_type,
+    user_id,
+    post_id
+FROM kafka_events;
+
+CREATE TABLE likes (
+    post_id UInt64,
+    user_id UInt64
+) ENGINE = MergeTree()
+ORDER BY (post_id, user_id);
+
+CREATE TABLE views (
+    post_id UInt64,
+    user_id UInt64
+) ENGINE = MergeTree()
+ORDER BY (post_id, user_id);
+
+CREATE MATERIALIZED VIEW likes_mv TO likes AS
+SELECT
+    post_id,
+    user_id
+FROM events_queue
+WHERE event_type = 'like';
+
+CREATE MATERIALIZED VIEW views_mv TO views AS
+SELECT
+    post_id,
+    user_id
+FROM events_queue
+WHERE event_type = 'view';

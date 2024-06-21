@@ -4,6 +4,8 @@ from database import add_user, update_user, authenticate_user, create_db, get_id
 from datetime import datetime, timedelta
 import os
 import grpc
+import json
+from kafka import KafkaProducer
 
 import post_pb2
 import post_pb2_grpc
@@ -22,6 +24,17 @@ post_server_port = os.environ.get('POST_SERVER_PORT', '50051')
 
 channel = grpc.insecure_channel(f'{post_server_host}:{post_server_port}')
 post_service_stub = post_pb2_grpc.PostServiceStub(channel)
+
+producer = KafkaProducer(
+    bootstrap_servers=['kafka:29092'],
+    api_version=(0, 11, 5),
+    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+    request_timeout_ms=3000,
+)
+
+@app.route('/healthcheck')
+def healthcheck():
+    return jsonify({'status': 'OK'})
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -45,10 +58,13 @@ def login():
     username = data.get('username')
     password = data.get('password')
     if username and password:
-        authenticated = authenticate_user(username, password)
-        if authenticated:
+        user = authenticate_user(username, password)
+        if user:
             access_token = create_access_token(identity=username)
-            return jsonify(access_token=access_token), 200
+            return jsonify({
+                'access_token': access_token,
+                'user_id': user.id
+            })
         else:
             return jsonify({'error': 'Invalid credentials'}), 401
     else:
@@ -120,11 +136,9 @@ def delete_post(post_id):
         return jsonify({'error': str(e)}), 500
 
 @app.route('/posts/<post_id>', methods=['GET'])
-@jwt_required()
 def get_post(post_id):
-    cur_user_id = get_id(get_jwt_identity())
     try:
-        response = post_service_stub.GetPostById(post_pb2.GetPostByIdRequest(id=post_id, user_id=cur_user_id))
+        response = post_service_stub.GetPostById(post_pb2.GetPostByIdRequest(id=post_id))
         if response.post:
             post_data = {
                 'id': response.post.id,
@@ -141,11 +155,11 @@ def get_post(post_id):
 @app.route('/posts', methods=['GET'])
 @jwt_required()
 def list_posts():
-    cur_user_id = get_id(get_jwt_identity())
+    user_id = request.args.get('user_id', default=get_id(get_jwt_identity()), type=int)
     page_number = request.args.get('page_number', default=1, type=int)
     page_size = request.args.get('page_size', default=5, type=int)
     try:
-        response = post_service_stub.ListPosts(post_pb2.ListPostsRequest(user_id=cur_user_id, page_number=page_number, page_size=page_size))
+        response = post_service_stub.ListPosts(post_pb2.ListPostsRequest(user_id=user_id, page_number=page_number, page_size=page_size))
         posts_data = [{
             'id': post.id,
             'owner_id': post.owner_id,
@@ -155,6 +169,30 @@ def list_posts():
         return jsonify(posts_data), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/view/<post_id>', methods=['PUT'])
+@jwt_required()
+def view_post(post_id):
+    user_id = get_id(get_jwt_identity())
+    producer.send('events', value={
+        "event": "view",
+        "user_id": int(user_id),
+        "post_id": str(post_id),
+    })
+    producer.flush() 
+    return jsonify({'message': 'Post viewed successfully'}), 200
+
+@app.route('/like/<post_id>', methods=['PUT'])
+@jwt_required()
+def like_post(post_id):
+    user_id = get_id(get_jwt_identity())
+    producer.send('events', value={
+        "event": "like",
+        "user_id": int(user_id),
+        "post_id": str(post_id),
+    })
+    producer.flush() 
+    return jsonify({'message': 'Post liked successfully'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

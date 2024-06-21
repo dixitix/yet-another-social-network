@@ -64,8 +64,6 @@ class Database:
 
         if not post:
             return {"success": False, "message": "Post not found"}
-        if post['owner_id'] != request.user_id:
-            return {"success": False, "message": "Permission denied"}
         
         post["_id"] = str(post["_id"])
         return {"success": True, "post": post}

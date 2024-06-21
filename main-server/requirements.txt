@@ -6,3 +6,4 @@ bcrypt
 Flask-JWT-Extended
 grpcio
 protobuf
+kafka-python

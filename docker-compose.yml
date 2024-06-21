@@ -26,8 +26,11 @@ services:
       FLASK_ENV: development
       DATABASE_URL: postgresql://dixitix:dixi@main-db/network_main_server
       POST_SERVER_HOST: post-web
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:29092"
     depends_on:
       - main-db
+      - post-web
+      - kafka
     networks:
       - app-network
 
@@ -52,6 +55,57 @@ services:
     networks:
       - app-network
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - app-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - kafka_data:/var/lib/kafka
+    networks:
+      - app-network
+
+  clickhouse:
+     image: yandex/clickhouse-server:latest
+     restart: unless-stopped
+     ports:
+       - "8123:8123"
+       - "9000:9000"
+     networks:
+       - app-network
+
+  statistics-server:
+    build:
+      context: ./statistics-server
+    command: python app.py
+    ports:
+      - "50052:50052"
+    environment:
+      FLASK_APP: app.py
+      FLASK_ENV: development
+    depends_on:
+      - clickhouse
+      - kafka
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
@@ -59,3 +113,5 @@ networks:
 volumes:
   main_postgres_data:
   post_mongo_data:
+  kafka_data:
+  clickhouse_data:
