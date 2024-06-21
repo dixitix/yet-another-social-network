@@ -33,7 +33,6 @@ message ListPostsRequest {
 // The request message for retrieving a post by its ID.
 message GetPostByIdRequest {
   string id = 1;
-  int32 user_id = 2;
 }
 
 // Represents a post object with an ID, owner id, title, and content.

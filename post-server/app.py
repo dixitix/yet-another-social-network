@@ -87,12 +87,8 @@ class PostService(post_pb2_grpc.PostServiceServicer):
                 )
             )
         else:
-            if result.message == "Permission denied":
-                context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-                context.set_details(result.message)
-            else:
-                context.set_code(grpc.StatusCode.NOT_FOUND)
-                context.set_details(result.message)
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details(result.message)
             return post_pb2.OperationResponse(
                 success=False
             )

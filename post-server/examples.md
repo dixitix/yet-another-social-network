@@ -1,5 +1,5 @@
 curl -X POST http://localhost:5001/posts \
--H "Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMzI3NzExMSwianRpIjoiMmNhYzYxODItZjZhMC00NDkyLTk0ZTItODllYWIxOTE4YTUyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6Im5ld3VzZXIiLCJuYmYiOjE3MTMyNzcxMTEsImNzcmYiOiIzOWRlZWY0NC03YWY1LTQyZWQtOTdiOS0xOTQ1ZWU4NmEyNjUiLCJleHAiOjE3MTMyODA3MTF9.clicDYyoDKdm5M6HxbMMrVA8EENHYkbArw3n2tinw44"" \
+-H "Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxODk4MjY4OSwianRpIjoiOWNlODBmNGMtNDEyNi00MTM4LWIxZTItMjZjYjFlNmY5NTliIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6Im5ld3VzZXIxIiwibmJmIjoxNzE4OTgyNjg5LCJjc3JmIjoiZGRkMWVhZWMtNDVmYi00MjQ5LThmMWItYTM0YmE2OWVkNzU3IiwiZXhwIjoxNzE4OTg2Mjg5fQ.-X-aCAq3JwIdOP_wpOjMddoT9n6zGsfnt2eUHrOOsEQ"" \
 -H "Content-Type: application/json" \
 -d '{
   "title": "End of life",

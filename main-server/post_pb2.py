@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\npost.proto\x12\x04post\"E\n\x11\x43reatePostRequest\x12\x10\n\x08owner_id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\t\"P\n\x11UpdatePostRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\x12\r\n\x05title\x18\x03 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x04 \x01(\t\"0\n\x11\x44\x65letePostRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\"K\n\x10ListPostsRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\x05\x12\x13\n\x0bpage_number\x18\x02 \x01(\x05\x12\x11\n\tpage_size\x18\x03 \x01(\x05\"1\n\x12GetPostByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\"D\n\x04Post\x12\n\n\x02id\x18\x01 \x01(\t\x12\x10\n\x08owner_id\x18\x02 \x01(\x05\x12\r\n\x05title\x18\x03 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x04 \x01(\t\">\n\x11OperationResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x18\n\x04post\x18\x02 \x01(\x0b\x32\n.post.Post\"A\n\x11ListPostsResponse\x12\x19\n\x05posts\x18\x01 \x03(\x0b\x32\n.post.Post\x12\x11\n\tnext_page\x18\x02 \x01(\x05\x32\xcd\x02\n\x0bPostService\x12>\n\nCreatePost\x12\x17.post.CreatePostRequest\x1a\x17.post.OperationResponse\x12>\n\nUpdatePost\x12\x17.post.UpdatePostRequest\x1a\x17.post.OperationResponse\x12>\n\nDeletePost\x12\x17.post.DeletePostRequest\x1a\x17.post.OperationResponse\x12@\n\x0bGetPostById\x12\x18.post.GetPostByIdRequest\x1a\x17.post.OperationResponse\x12<\n\tListPosts\x12\x16.post.ListPostsRequest\x1a\x17.post.ListPostsResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\npost.proto\x12\x04post\"E\n\x11\x43reatePostRequest\x12\x10\n\x08owner_id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x03 \x01(\t\"P\n\x11UpdatePostRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\x12\r\n\x05title\x18\x03 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x04 \x01(\t\"0\n\x11\x44\x65letePostRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\"K\n\x10ListPostsRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\x05\x12\x13\n\x0bpage_number\x18\x02 \x01(\x05\x12\x11\n\tpage_size\x18\x03 \x01(\x05\" \n\x12GetPostByIdRequest\x12\n\n\x02id\x18\x01 \x01(\t\"D\n\x04Post\x12\n\n\x02id\x18\x01 \x01(\t\x12\x10\n\x08owner_id\x18\x02 \x01(\x05\x12\r\n\x05title\x18\x03 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x04 \x01(\t\">\n\x11OperationResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x18\n\x04post\x18\x02 \x01(\x0b\x32\n.post.Post\"A\n\x11ListPostsResponse\x12\x19\n\x05posts\x18\x01 \x03(\x0b\x32\n.post.Post\x12\x11\n\tnext_page\x18\x02 \x01(\x05\x32\xcd\x02\n\x0bPostService\x12>\n\nCreatePost\x12\x17.post.CreatePostRequest\x1a\x17.post.OperationResponse\x12>\n\nUpdatePost\x12\x17.post.UpdatePostRequest\x1a\x17.post.OperationResponse\x12>\n\nDeletePost\x12\x17.post.DeletePostRequest\x1a\x17.post.OperationResponse\x12@\n\x0bGetPostById\x12\x18.post.GetPostByIdRequest\x1a\x17.post.OperationResponse\x12<\n\tListPosts\x12\x16.post.ListPostsRequest\x1a\x17.post.ListPostsResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -30,13 +30,13 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_LISTPOSTSREQUEST']._serialized_start=223
   _globals['_LISTPOSTSREQUEST']._serialized_end=298
   _globals['_GETPOSTBYIDREQUEST']._serialized_start=300
-  _globals['_GETPOSTBYIDREQUEST']._serialized_end=349
-  _globals['_POST']._serialized_start=351
-  _globals['_POST']._serialized_end=419
-  _globals['_OPERATIONRESPONSE']._serialized_start=421
-  _globals['_OPERATIONRESPONSE']._serialized_end=483
-  _globals['_LISTPOSTSRESPONSE']._serialized_start=485
-  _globals['_LISTPOSTSRESPONSE']._serialized_end=550
-  _globals['_POSTSERVICE']._serialized_start=553
-  _globals['_POSTSERVICE']._serialized_end=886
+  _globals['_GETPOSTBYIDREQUEST']._serialized_end=332
+  _globals['_POST']._serialized_start=334
+  _globals['_POST']._serialized_end=402
+  _globals['_OPERATIONRESPONSE']._serialized_start=404
+  _globals['_OPERATIONRESPONSE']._serialized_end=466
+  _globals['_LISTPOSTSRESPONSE']._serialized_start=468
+  _globals['_LISTPOSTSRESPONSE']._serialized_end=533
+  _globals['_POSTSERVICE']._serialized_start=536
+  _globals['_POSTSERVICE']._serialized_end=869
 # @@protoc_insertion_point(module_scope)

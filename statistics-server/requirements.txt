@@ -1,0 +1,5 @@
+Flask
+Flask-Cors
+clickhouse-driver
+clickhouse-connect
+kafka-python
